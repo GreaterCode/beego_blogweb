@@ -22,6 +22,7 @@ func (this *LoginController) Post() {
 	id := models.QueryUserWithUsername(username)
 	fmt.Println("登录用户ID：", id)
 	if id > 0 {
+		this.SetSession("loginuser", username)
 		this.Data["json"] = map[string]interface{}{"code": 1, "message": "Login is sueccessful!!"}
 	} else {
 		this.Data["json"] = map[string]interface{}{"code": 0, "message": "Login is failed!!!"}
