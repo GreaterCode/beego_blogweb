@@ -4,6 +4,7 @@ import (
 	"beego_blogweb/utils"
 	"fmt"
 	"github.com/astaxie/beego"
+	"strconv"
 )
 
 // 存储表的行数
@@ -43,6 +44,20 @@ func FindArticleWithPage(page int) ([]Article, error) {
 func QueryArticleWithPage(page, num int) ([]Article, error) {
 	sql := fmt.Sprintf("limit %d %d", page*num, num)
 	return QueryArticleWithCon(sql)
+}
+
+func QueryArticleWithId(id int) Article {
+	row := utils.QueryRowDB("select id,title,tags,short,content,author,createtime from article  where id=" + strconv.Itoa(id))
+	title := ""
+	tags := ""
+	short := ""
+	content := ""
+	author := ""
+	var createtime int64
+	createtime = 0
+	row.Scan(&id, &title, &tags, &short, &content, &author, &createtime)
+	art := Article{id, title, tags, short, content, author, createtime}
+	return art
 }
 
 func QueryArticleWithCon(sql string) ([]Article, error) {
