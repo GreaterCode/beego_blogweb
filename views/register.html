@@ -10,6 +10,7 @@
     <script src="../static/js/blog.js"></script>
 </head>
 <body>
+<!--
 <div id="nav">
     <div id="nav-login">
         <ul>
@@ -20,10 +21,13 @@
 
     </div>
 </div>
+-->
+
+{{template "block/nav.html"}}
 
 <div class="htmleaf-container">
     <div class="wrapper">
-        <!--注册表单-->
+    {{/*注册表单*/}}
         <div class="container">
             <h1>Welcome</h1>
             <form id="register-form" class="form">
@@ -35,7 +39,7 @@
             </form>
         </div>
 
-        {{/*背景动画*/}}
+    {{/*背景动画*/}}
         <ul class="bg-bubbles">
             <li></li>
             <li></li>
