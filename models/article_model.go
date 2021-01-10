@@ -33,6 +33,11 @@ func insertArticle(article Article) (int64, error) {
 		article.Title, article.Tags, article.Short, article.Content, article.Author, article.Createtime)
 }
 
+func UpdateArticle(article Article) (int64, error) {
+	return utils.ModifyDB("update article set title=?, tags=?, short=?, content=? where id=?",
+		article.Title, article.Tags, article.Short, article.Content, article.Id)
+}
+
 // 查询文章
 func FindArticleWithPage(page int) ([]Article, error) {
 	num, _ := beego.AppConfig.Int("articleListPageNum")
