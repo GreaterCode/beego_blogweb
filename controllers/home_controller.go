@@ -10,16 +10,23 @@ type HomeController struct {
 }
 
 func (this *HomeController) Get() {
+	tag := this.GetString("tag")
+	fmt.Println("tag:", tag)
 	page, _ := this.GetInt("page")
-	if page <= 0 {
-		page = 1
+	var artList []models.Article
+	if len(tag) > 0 {
+		artList, _ = models.QueryArticlesWithCon(tag)
+		this.Data["HasFooter"] = false
+	} else {
+		if page <= 0 {
+			page = 1
+		}
+		artList, _ = models.FindArticleWithPage(page)
+		this.Data["PageCode"] = models.ConfigHomeFooterPageCode(page)
+		this.Data["HasFooter"] = true
 	}
 
-	var artList []models.Article
-	artList, _ = models.FindArticleWithPage(page)
 	fmt.Println("IsLogin", this.IsLogin)
 	this.Data["Content"] = models.MakeHomeBlocks(artList, this.IsLogin)
-	this.Data["PageCode"] = models.ConfigHomeFooterPageCode(page)
-	this.Data["HasFooter"] = true
 	this.TplName = "home.html"
 }

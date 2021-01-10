@@ -49,7 +49,7 @@ func FindArticleWithPage(page int) ([]Article, error) {
 
 func QueryArticleWithPage(page, num int) ([]Article, error) {
 	sql := fmt.Sprintf("limit %d %d", page*num, num)
-	return QueryArticleWithCon(sql)
+	return QueryArticlesWithCon(sql)
 }
 
 func QueryArticleWithId(id int) Article {
@@ -66,7 +66,7 @@ func QueryArticleWithId(id int) Article {
 	return art
 }
 
-func QueryArticleWithCon(sql string) ([]Article, error) {
+func QueryArticlesWithCon(sql string) ([]Article, error) {
 	sql = "select id,title,tags,short,content,author,createtime from article " + sql
 	rows, err := utils.QueryDB(sql)
 	if err != nil {
@@ -127,4 +127,24 @@ func QueryArticleWithParam(param string) []string {
 	}
 
 	return paramList
+}
+
+// 按照标签查询
+/*
+通过标签查询首页的数据
+有四种情况
+	1.左右两边有&符和其他符号
+	2.左边有&符号和其他符号，同时右边没有任何符号
+	3.右边有&符号和其他符号，同时左边没有任何符号
+	4.左右两边都没有符号
+通过%去匹配任意多个字符，至少是一个
+*/
+func QueryArticlesWithTag(tag string) ([]Article, error) {
+
+	sql := " where tags like '%&" + tag + "&%'"
+	sql += " or tags like '%&" + tag + "'"
+	sql += " or tags like '" + tag + "&%'"
+	sql += " or tags like '" + tag + "'"
+	fmt.Println(sql)
+	return QueryArticlesWithCon(sql)
 }
