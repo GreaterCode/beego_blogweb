@@ -4,6 +4,7 @@ import (
 	"beego_blogweb/utils"
 	"fmt"
 	"github.com/astaxie/beego"
+	"log"
 	"strconv"
 )
 
@@ -110,4 +111,20 @@ func QueryArticleRowNum() int {
 // 设置页数
 func SetArticleRowsNum() {
 	articleRowsNum = QueryArticleRowNum()
+}
+
+//查询标签,返回一个字段的列表
+func QueryArticleWithParam(param string) []string {
+	rows, err := utils.QueryDB(fmt.Sprintf("select %s from article", param))
+	if err != nil {
+		log.Println(err)
+	}
+	var paramList []string
+	for rows.Next() {
+		arg := ""
+		rows.Scan(&arg)
+		paramList = append(paramList, arg)
+	}
+
+	return paramList
 }
